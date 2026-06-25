@@ -1,24 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a Next.js app with Better Auth and Drizzle ORM configured for PostgreSQL.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and run the app:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Drizzle Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Set `DATABASE_URL` in `.env`.
+2. Generate migrations:
+
+```bash
+bun run db:generate
+```
+
+3. Apply migrations:
+
+```bash
+bun run db:migrate
+```
+
+4. (Optional) Open Drizzle Studio:
+
+```bash
+bun run db:studio
+```
+
+Schema lives in `db/schema.ts`, Drizzle client is exported from `db/index.ts`, and Drizzle Kit config is in `drizzle.config.ts`.
 
 ## Learn More
 
