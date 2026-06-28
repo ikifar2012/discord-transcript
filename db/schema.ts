@@ -10,7 +10,7 @@ export const credits = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    amount: integer("amount").notNull().default(30),
+    amount: integer("amount").notNull().default(900), // 15 minutes in seconds
     used: integer("used").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")

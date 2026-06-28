@@ -22,8 +22,8 @@ async function UserCreditsSection({ userId }: { userId: string }) {
     .limit(1);
 
   const creditData = userCredits[0];
-  const includedMinutes = creditData?.amount || 0;
-  const usedMinutes = creditData?.used || 0;
+  const includedMinutes = creditData?.amount / 60 || 0; // Convert seconds to minutes
+  const usedMinutes = creditData?.used / 60 || 0; // Convert seconds to minutes
 
   return (
     <UsageCard
