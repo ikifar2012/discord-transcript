@@ -11,7 +11,6 @@ export default async function getDiscordIdFromUserId(userId: string): Promise<st
 
     const userAccount = lookup[0];
     if (!userAccount) {
-        console.log(lookup)
         throw new Error(`No Discord ID found for user ID: ${userId}`);
     }
     return userAccount.accountId;
