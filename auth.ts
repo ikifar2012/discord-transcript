@@ -6,18 +6,10 @@ import { db } from "./db";
 import { createAuthMiddleware } from "better-auth/api";
 import { credits } from "./db/schema";
 import { eq } from "drizzle-orm";
-import { randomUUID } from "crypto";
+import { customSession } from "better-auth/plugins";
+import getDiscordIdFromUserId from "./lib/get-discord-id";
 
-const stripePlugin =
-  process.env.STRIPE_SECRET_KEY && process.env.STRIPE_WEBHOOK_SECRET
-    ? stripe({
-        stripeClient: new Stripe(process.env.STRIPE_SECRET_KEY, {
-          apiVersion: "2026-05-27.dahlia",
-        }),
-        stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-        createCustomerOnSignUp: true,
-      })
-    : null;
+
 
 export const auth = betterAuth({
   socialProviders: {
@@ -35,13 +27,12 @@ export const auth = betterAuth({
         const existingCredits = await db
           .select()
           .from(credits)
-          .where(eq(credits.userId, session.userId))
+          .where(eq(credits.discord_id, session.user.discordId))
           .limit(1);
         if (existingCredits.length === 0) {
           await db.insert(credits).values({
-            id: randomUUID(),
-            userId: session.userId,
-            amount: 30,
+            discord_id: session.user.discordId,
+            amount: 900, // 15 minutes in seconds
             used: 0,
           });
         }
@@ -52,5 +43,25 @@ export const auth = betterAuth({
     provider: "pg",
   }),
   secret: process.env.BETTER_AUTH_SECRET,
-  plugins: stripePlugin ? [stripePlugin] : [],
+  plugins: [
+    stripe({
+      stripeClient: new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        apiVersion: "2026-05-27.dahlia",
+      }),
+      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      createCustomerOnSignUp: true,
+    }),
+    customSession(async ({ user, session }) => {
+      const discordId = await getDiscordIdFromUserId(user.id);
+      return {
+        user: {
+          ...user,
+          discordId: discordId,
+        },
+        session
+      };
+    }),
+
+  ],
+
 });

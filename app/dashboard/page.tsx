@@ -13,12 +13,12 @@ import { SetupCard } from "./_components/setup-card";
 import { UsageCard } from "./_components/usage-card";
 import { UsageCardSkeleton } from "./_components/usage-card-skeleton";
 
-async function UserCreditsSection({ userId }: { userId: string }) {
+async function UserCreditsSection({ discordId }: { discordId: string }) {
   // Fetch user's credits from database
   const userCredits = await db
     .select()
     .from(credits)
-    .where(eq(credits.userId, userId))
+    .where(eq(credits.discord_id, discordId))
     .limit(1);
 
   const creditData = userCredits[0];
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
     <DashboardShell user={user}>
       <DashboardHero />
       <Suspense fallback={<UsageCardSkeleton />}>
-        <UserCreditsSection userId={session.user.id} />
+        <UserCreditsSection discordId={session.user.discordId} />
       </Suspense>
       <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_340px]">
         <PurchaseHoursCard hourPacks={HOUR_PACKS} />
