@@ -18,9 +18,9 @@ export const credits = pgTable(
 export const stats = pgTable(
   "stats",
   {
-    discord_id: text("discord_id").notNull().primaryKey().references(() => credits.discord_id),
+    discord_id: text("discord_id").notNull().unique().references(() => credits.discord_id),
+    totalMinutesPurchased: integer("total_minutes_purchased").notNull().default(0),
     totalMinutesUsed: integer("total_minutes_used").notNull().default(0),
-    totaltransactions: integer("total_transactions").notNull().default(0),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")

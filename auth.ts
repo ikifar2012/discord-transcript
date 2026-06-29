@@ -21,17 +21,18 @@ export const auth = betterAuth({
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
       // Example: Add 30 credits to a new user after signup
-      const session = ctx.context.newSession?.session;
+      const session = ctx.context.newSession?.session.userId
       if (session) {
+        const discordId = await getDiscordIdFromUserId(session);
         // does user already have credits? if not, add 30 credits
         const existingCredits = await db
           .select()
           .from(credits)
-          .where(eq(credits.discord_id, session.user.discordId))
+          .where(eq(credits.discord_id, discordId))
           .limit(1);
         if (existingCredits.length === 0) {
           await db.insert(credits).values({
-            discord_id: session.user.discordId,
+            discord_id: discordId,
             amount: 900, // 15 minutes in seconds
             used: 0,
           });
