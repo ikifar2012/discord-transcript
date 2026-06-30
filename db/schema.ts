@@ -5,7 +5,7 @@ export * from "../auth-schema";
 export const credits = pgTable(
   "credits",
   {
-    discord_id: text("discord_id").notNull().unique().primaryKey(),
+    discord_id: text("discord_id").notNull().primaryKey(),
     amount: integer("amount").notNull().default(900), // 15 minutes in seconds
     used: integer("used").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -19,8 +19,8 @@ export const stats = pgTable(
   "stats",
   {
     discord_id: text("discord_id").notNull().unique().references(() => credits.discord_id),
-    totalMinutesPurchased: integer("total_minutes_purchased").notNull().default(0),
-    totalMinutesUsed: integer("total_minutes_used").notNull().default(0),
+    totalSecondsPurchased: integer("total_seconds_purchased").notNull().default(0),
+    totalSecondsUsed: integer("total_seconds_used").notNull().default(0),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")

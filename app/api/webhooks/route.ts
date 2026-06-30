@@ -1,6 +1,7 @@
 // Partial of app/api/webhooks/route.ts
 import { Stripe } from "stripe";
 import { NextResponse } from "next/server";
+import { addCredits } from "@/lib/credits";
 export async function POST(req: Request) {
   let event: Stripe.Event;
 
@@ -23,12 +24,16 @@ export async function POST(req: Request) {
 // Handle the event
 // add credit to the user account based on the event type
     switch (event.type) {
-        case "checkout.session.completed":
-        const session = event.data.object as Stripe.Checkout.Session;
-        console.log(`Checkout session completed for session ID: ${session.id}`);
-        // Add credit to the user account based on the session details
-        
+        case "payment_intent.succeeded":
+            const paymentIntent = event.data.object as Stripe.PaymentIntent;
+            console.log(`💰 PaymentIntent was successful! ${paymentIntent.id}`)
+            if (paymentIntent.metadata.discordId && paymentIntent.amount) {
+                const amount = paymentIntent.amount
+                console.log(`Adding ${amount} credits to user ${discordId}`);
+                await addCredits({ discordId, amount });
+            }
         break;
         default:
         console.log(`Unhandled event type: ${event.type}`);
-    }   
+    }
+  }

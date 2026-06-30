@@ -7,11 +7,12 @@ import { credits } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { DashboardHero } from "./_components/dashboard-hero";
 import { DashboardShell } from "./_components/dashboard-shell";
-import { HOUR_PACKS, SETUP_STEPS } from "./_components/dashboard-data";
+import { SETUP_STEPS } from "./_components/dashboard-data";
 import { PurchaseHoursCard } from "./_components/purchase-hours-card";
 import { SetupCard } from "./_components/setup-card";
 import { UsageCard } from "./_components/usage-card";
 import { UsageCardSkeleton } from "./_components/usage-card-skeleton";
+import { HOUR_PACKS } from "../data/prices";
 
 async function UserCreditsSection({ discordId }: { discordId: string }) {
   // Fetch user's credits from database
