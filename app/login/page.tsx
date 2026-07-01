@@ -3,8 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { DiscordLoginButton } from "../components/discord-login-button";
 import { MarketingShell } from "../components/marketing-shell";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export default async function LoginPage() {
@@ -17,7 +16,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <MarketingShell showDashboardLink={false}>
+    <MarketingShell>
       <section className="flex flex-1 flex-col items-center justify-center py-12 lg:py-20">
         <div className="w-full max-w-md space-y-8">
           {/* Header Section */}
@@ -51,7 +50,7 @@ export default async function LoginPage() {
 
               {/* Info Text */}
               <p className="text-center text-xs leading-relaxed text-muted-foreground">
-                Automatically redirects if you're already signed in. No account creation needed—just Discord OAuth.
+                Automatically redirects if you&apos;re already signed in. No account creation needed, just Discord OAuth.
               </p>
             </CardContent>
           </Card>

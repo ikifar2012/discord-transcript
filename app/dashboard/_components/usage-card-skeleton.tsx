@@ -3,23 +3,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function UsageCardSkeleton() {
   return (
-    <Card className="mt-7 rounded-lg bg-card/95">
-      <CardContent>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground">Minutes used</p>
-            <div className="mt-3 flex items-baseline gap-3">
-              <Skeleton className="h-14 w-32" />
-              <Skeleton className="h-5 w-48" />
-            </div>
-            <Skeleton className="mt-3 h-6 w-full max-w-md" />
+    <Card className="mt-6 rounded-2xl border-border/70 bg-card/85 shadow-[0_18px_50px_rgba(0,0,0,0.2)]">
+      <CardContent className="p-5 sm:p-6">
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <Skeleton className="h-20 rounded-xl" />
+            <Skeleton className="h-20 rounded-xl" />
+            <Skeleton className="col-span-2 h-20 rounded-xl sm:col-span-1" />
           </div>
-          <div className="w-full lg:max-w-sm">
+
+          <div>
+            <Skeleton className="mb-2 h-3 w-20" />
             <Skeleton className="h-2 w-full" />
-            <div className="mt-3 flex justify-between">
-              <Skeleton className="h-4 w-8" />
-              <Skeleton className="h-4 w-12" />
-            </div>
+            <Skeleton className="mt-3 h-5 w-full max-w-sm" />
           </div>
         </div>
       </CardContent>

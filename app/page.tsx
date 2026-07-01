@@ -1,61 +1,68 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { MarketingShell } from "./components/marketing-shell";
-
-const steps = [
-  ["Connect", "Sign in with Discord and open the dashboard."],
-  ["Purchase", "Add transcription hours for long voice memos."],
-  ["Transcribe", "Use the bot inside Discord when audio needs to become text."],
-];
+import { HOUR_PACKS } from "./data/prices";
 
 export default function Home() {
   return (
     <MarketingShell>
-      <section className="grid flex-1 items-center gap-12 py-12 lg:grid-cols-[1fr_430px] lg:py-16">
-        <div className="max-w-3xl">
-          <p className="text-sm font-medium text-muted-foreground">
-            Discord voice memo transcription
-          </p>
-          <h1 className="mt-5 max-w-4xl text-6xl font-semibold leading-[0.98] tracking-[-0.055em] text-foreground sm:text-7xl">
-            Turn voice memos into text without leaving Discord.
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Discord Tools by Matheson lets users purchase transcription hours and use them directly from Discord. Three hours starts at $3.
-          </p>
+      <section className="py-10 sm:py-12 lg:py-16">
+        <div className="mx-auto max-w-5xl space-y-6">
+          <div className="rounded-3xl border border-border/60 bg-card/80 p-6 shadow-[0_16px_45px_rgba(0,0,0,0.2)] backdrop-blur sm:p-8">
+            <Badge variant="secondary" className="rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.12em]">
+              Discord Voice Transcription
+            </Badge>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/dashboard" className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition hover:bg-primary/80">
-              Open dashboard
-            </Link>
-            <Link href="/login" className="inline-flex h-9 items-center justify-center rounded-lg bg-secondary px-4 text-sm font-medium text-secondary-foreground transition hover:bg-secondary/80">
-              Continue with Discord
-            </Link>
-          </div>
-        </div>
+            <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+              Turn every voice memo into searchable text.
+            </h1>
 
-        <div className="rounded-lg bg-card p-5 shadow-[0_30px_140px_rgba(0,0,0,0.65)] ring-1 ring-border">
-          <div className="flex items-center justify-between border-b border-border pb-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Transcription</p>
-              <h2 className="mt-1 text-xl font-semibold tracking-[-0.02em] text-foreground">180 minutes available</h2>
+            <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+              Buy hours once, transcribe directly in Discord, and track usage in a clean dashboard.
+            </p>
+
+            <div className="mt-7">
+              <Link href="/dashboard" className={cn(buttonVariants({ size: "lg" }), "h-11 sm:w-auto")}>
+                Open dashboard
+              </Link>
             </div>
-            <span className="rounded-md bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">$3</span>
           </div>
 
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full w-[22%] rounded-full bg-primary" />
-          </div>
+          <Card className="rounded-2xl border-border/70 bg-card/85 shadow-[0_18px_50px_rgba(0,0,0,0.2)]">
+            <CardHeader>
+              <CardTitle>Buy more hours</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid gap-3 md:grid-cols-3">
+              {HOUR_PACKS.map((pack, index) => (
+                <Link
+                  key={pack.id}
+                  href="/dashboard"
+                  className="group relative block overflow-hidden rounded-xl bg-muted/45 p-4 text-left ring-1 ring-border transition duration-200 hover:-translate-y-0.5 hover:bg-muted hover:ring-foreground/30 sm:p-5"
+                >
+                  <div
+                    className={`pointer-events-none absolute inset-x-0 top-0 h-1 ${index === 1 ? "bg-gradient-to-r from-amber-400 via-orange-300 to-amber-400" : "bg-gradient-to-r from-sky-300/50 via-cyan-200/40 to-sky-300/50"}`}
+                  />
 
-          <div className="mt-6 space-y-4">
-            {steps.map(([title, text]) => (
-              <div key={title} className="flex gap-3">
-                <span className="mt-1 size-2 rounded-full bg-primary" />
-                <div>
-                  <p className="text-sm font-medium text-foreground">{title}</p>
-                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p>
-                </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm font-medium text-muted-foreground">{pack.hours}</p>
+                  </div>
+                  <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">{pack.price}</p>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{pack.description}</p>
+
+                  <div className="mt-4 inline-flex min-h-5 items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/80">
+                    Buy now
+                    <span className="transition group-hover:translate-x-0.5">→</span>
+                  </div>
+                </Link>
+              ))}
               </div>
-            ))}
-          </div>
+
+            </CardContent>
+          </Card>
         </div>
       </section>
     </MarketingShell>

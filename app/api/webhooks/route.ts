@@ -24,14 +24,11 @@ export async function POST(req: Request) {
 // Handle the event
 // add credit to the user account based on the event type
     switch (event.type) {
-        case "payment_intent.succeeded":
-            const paymentIntent = event.data.object as Stripe.PaymentIntent;
-            console.log(`💰 PaymentIntent was successful! ${paymentIntent.id}`)
-            if (paymentIntent.metadata.discordId && paymentIntent.amount) {
-                const amount = paymentIntent.amount
-                console.log(`Adding ${amount} credits to user ${discordId}`);
-                await addCredits({ discordId, amount });
-            }
+        case "checkout.session.completed":
+            if (event.data.object.payment_status !== "unpaid") {
+                const session = event.data.object as Stripe.Checkout.Session;
+                const discordId = session.metadata?.
+            } 
         break;
         default:
         console.log(`Unhandled event type: ${event.type}`);

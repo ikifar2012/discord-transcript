@@ -1,3 +1,12 @@
+export type HourPack = {
+  id: number;
+  hours: string;
+  price: string;
+  priceincents: number;
+  description: string;
+  seconds: number;
+};
+
 export const HOUR_PACKS = [
   {
     id: 2,
@@ -23,4 +32,7 @@ export const HOUR_PACKS = [
     description: "Heavy audio use",
     seconds: 10 * 60 * 60, // 10 hours in seconds
   }
-]
+] as const satisfies readonly HourPack[];
+
+export type HourPackName = (typeof HOUR_PACKS)[number]["hours"];
+export type HourPackId = (typeof HOUR_PACKS)[number]["id"];

@@ -9,33 +9,41 @@ export async function UsageCard({
   includedMinutes: number;
   usedMinutes: number;
 }) {
-  const remainingMinutes = includedMinutes - usedMinutes;
-  const percentUsed = Math.round((usedMinutes / includedMinutes) * 100);
+  const safeIncludedMinutes = Math.max(0, Math.round(includedMinutes));
+  const safeUsedMinutes = Math.max(0, Math.round(usedMinutes));
+  const remainingMinutes = Math.max(0, safeIncludedMinutes - safeUsedMinutes);
+  const percentUsed = safeIncludedMinutes === 0
+    ? 0
+    : Math.min(100, Math.round((safeUsedMinutes / safeIncludedMinutes) * 100));
 
   return (
-    <Card className="mt-7 rounded-lg bg-card/95">
-      <CardContent>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">Minutes used</p>
-            <div className="mt-3 flex items-baseline gap-3">
-              <p className="text-5xl font-semibold tracking-[-0.04em]">
-                {usedMinutes}
-              </p>
-              <p className="text-sm font-medium text-muted-foreground">
-                of {includedMinutes} minutes
-              </p>
+    <Card className="mt-6 rounded-2xl border-border/70 bg-card/85 shadow-[0_18px_50px_rgba(0,0,0,0.2)]">
+      <CardContent className="p-5 sm:p-6">
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="rounded-xl bg-muted/45 p-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Remaining</p>
+              <p className="mt-1 text-2xl font-semibold tracking-[-0.03em]">{remainingMinutes}m</p>
             </div>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              {remainingMinutes} minutes available. Usage will update here as your voice memos are transcribed.
-            </p>
+            <div className="rounded-xl bg-muted/45 p-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Used</p>
+              <p className="mt-1 text-2xl font-semibold tracking-[-0.03em]">{safeUsedMinutes}m</p>
+            </div>
+            <div className="col-span-2 rounded-xl bg-muted/45 p-3 sm:col-span-1">
+              <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">Total</p>
+              <p className="mt-1 text-2xl font-semibold tracking-[-0.03em]">{safeIncludedMinutes}m</p>
+            </div>
           </div>
-          <div className="w-full lg:max-w-sm">
-            <Progress value={percentUsed} className="gap-2" />
-            <div className="mt-3 flex justify-between text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
-              <span>0m</span>
-              <span>{includedMinutes}m</span>
+
+          <div>
+            <div className="mb-2 flex items-center justify-between text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+              <span>Usage</span>
+              <span>{percentUsed}%</span>
             </div>
+            <Progress value={percentUsed} className="h-2" />
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Usage updates automatically as your voice memos are processed.
+            </p>
           </div>
         </div>
       </CardContent>

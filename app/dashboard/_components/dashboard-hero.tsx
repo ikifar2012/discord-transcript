@@ -13,25 +13,31 @@ export async function DashboardHero() {
   });
   const billingLink = await getBillingHistoryLink(
     session?.user?.id as string,
-    `${process.env.BETTER_AUTH_URL}/dashboard`
+    `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
   );
 
   return (
-    <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-      <div>
-        <Badge variant="secondary" className="rounded-lg">
-          Transcription
-        </Badge>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">
-          Manage transcription hours
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
-          Buy transcription hours for your Discord voice memos and track the minutes used by your account.
-        </p>
+    <section className="rounded-3xl border border-border/60 bg-card/80 p-6 shadow-[0_16px_45px_rgba(0,0,0,0.2)] backdrop-blur sm:p-8">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <Badge variant="secondary" className="rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.12em]">
+            Transcription
+          </Badge>
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-6xl">
+            Manage your transcription balance
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+            Buy hour packs in one tap and keep track of minutes used by your Discord account.
+          </p>
+        </div>
+
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <Link href="/" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "h-11 w-full sm:w-auto")}>Home</Link>
+          <Link href={billingLink} className={cn(buttonVariants({ size: "lg" }), "h-11 w-full sm:w-auto")}>
+            View Billing History
+          </Link>
+        </div>
       </div>
-      <Link href={billingLink} className={cn(buttonVariants({ size: "lg" }), "h-10")}>
-        View Billing History
-      </Link>
-    </div>
+    </section>
   );
 }
