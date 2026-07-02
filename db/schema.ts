@@ -1,4 +1,5 @@
 import { pgTable, text, integer, timestamp, index } from "drizzle-orm/pg-core";
+import { user } from "../auth-schema";
 
 export * from "../auth-schema";
 
@@ -27,4 +28,18 @@ export const stats = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
+)
+export const orders =pgTable(
+  "orders",
+
+  {
+    user_id: text("user_id").notNull().references(() => user.id),
+    order_id: text("order_id").notNull().unique(),
+    pack_ordered: text("pack_ordered").notNull(),
+    order_status: text("order_status").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  }
 );

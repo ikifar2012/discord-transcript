@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         case "checkout.session.completed":
             if (event.data.object.payment_status !== "unpaid") {
                 const session = event.data.object as Stripe.Checkout.Session;
-                console.log(session.metadata);
+                
             } 
         break;
         default:

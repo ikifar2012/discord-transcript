@@ -35,6 +35,7 @@ export async function startCheckout(formData: FormData) {
   }
 
   const checkoutSession = await createCheckoutSession({
+    userId: activeSession.user.id,
     discordId: activeSession.user.discordId,
     packId: parsedPackId as HourPackId,
   });
