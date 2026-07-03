@@ -29,13 +29,12 @@ export const stats = pgTable(
       .notNull(),
   },
 )
-export const orders =pgTable(
+export const orders = pgTable(
   "orders",
-
   {
-    user_id: text("user_id").notNull().references(() => user.id),
     order_id: text("order_id").notNull().unique(),
-    pack_ordered: text("pack_ordered").notNull(),
+    user_id: text("user_id").notNull().references(() => user.id),
+    pack_id: text("pack_id").notNull(),
     order_status: text("order_status").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
