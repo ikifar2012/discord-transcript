@@ -3,7 +3,7 @@ import { HOUR_PACKS } from "@/app/data/prices";
 import type { HourPackId } from "@/app/data/prices";
 import { getStripeCustomerId } from "./billing";
 import { db, orders } from "@/db";
-
+import { eq } from "drizzle-orm";
 const HOUR_PACKS_BY_ID = new Map(HOUR_PACKS.map((pack) => [pack.id, pack]));
 
 export async function createCheckoutSession(params: { userId: string; discordId: string; packId: HourPackId }) {
@@ -57,4 +57,40 @@ export async function generateOrderId(userId: string, packId: HourPackId, orderS
 
     return orderId;
     
+}
+export async function updateOrderStatus(orderId: string, newStatus: orderStatus): Promise<boolean> {
+try {
+    await db.update(orders)
+        .set({ order_status: newStatus })
+        .where(eq(orders.order_id, orderId));
+        return true
+}
+catch (error) {
+    console.error("Failed to update order status", {
+        orderId,
+        newStatus,
+        error,
+    });
+    throw error;
+}
+}
+
+export async function getOrderStatus(orderId: string): Promise<orderStatus | null> {
+    try {
+        const result = await db.select({
+            order_status: orders.order_status
+        }).from(orders).where(eq(orders.order_id, orderId)).limit(1);
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        return result[0].order_status as orderStatus;
+    } catch (error) {
+        console.error("Failed to get order status", {
+            orderId,
+            error,
+        });
+        throw error;
+    }
 }
