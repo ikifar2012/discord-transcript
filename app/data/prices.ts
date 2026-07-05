@@ -9,27 +9,27 @@ export type HourPack = {
 
 export const HOUR_PACKS = [
   {
-    id: 2,
-    hours: "2 hours",
-    price: "$3",
-    priceincents: 300, // 3 dollars in cents
-    description: "A few long voice memos",
-    seconds: 2 * 60 * 60, // 2 hours in seconds
+    id: 1,
+    hours: "1 hour",
+    price: "$2",
+    priceincents: 200, // 2 dollars in cents
+    description: "Try it out",
+    seconds: 1 * 60 * 60, // 1 hour in seconds
   },
   {
     id: 5,
     hours: "5 hours",
-    price: "$6",
-    priceincents: 600, // 6 dollars in cents
+    price: "$5",
+    priceincents: 500, // 5 dollars in cents
     description: "Regular audio use",
     seconds: 5 * 60 * 60, // 5 hours in seconds
   },
   {
     id: 10,
     hours: "10 hours",
-    price: "$12",
-    priceincents: 1200, // 12 dollars in cents
-    description: "Heavy audio use",
+    price: "$9",
+    priceincents: 900, // 9 dollars in cents
+    description: "Best value",
     seconds: 10 * 60 * 60, // 10 hours in seconds
   }
 ] as const satisfies readonly HourPack[];

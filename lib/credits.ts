@@ -1,8 +1,33 @@
 import { credits, db, stats } from "@/db";
 import { eq } from "drizzle-orm";
 
+const FREE_TRANSCRIPTIONS_TOTAL = 5;
+
+async function getFreeTranscriptionsRemaining(discordId: string): Promise<number> {
+    try {
+        const result = await db.select({
+            freeTranscriptionsUsed: credits.freeTranscriptionsUsed,
+        }).from(credits).where(eq(credits.discord_id, discordId)).limit(1);
+
+        if (result.length === 0) return FREE_TRANSCRIPTIONS_TOTAL;
+        
+        return Math.max(0, FREE_TRANSCRIPTIONS_TOTAL - result[0].freeTranscriptionsUsed);
+    } catch (error) {
+        console.error("Failed to get free transcriptions remaining", { discordId, error });
+        throw error;
+    }
+}
+
 async function enoughCredits(params: { discordId: string; amount: number }): Promise<boolean> {
     try {
+        const freeRemaining = await getFreeTranscriptionsRemaining(params.discordId);
+        
+        // If they have free transcriptions available, they can proceed
+        if (freeRemaining > 0) {
+            return true;
+        }
+
+        // Otherwise, check paid credits
         const remaining = await creditsRemaining({ discordId: params.discordId });
         const hasEnough = remaining >= params.amount;
         return hasEnough;
@@ -62,17 +87,43 @@ async function addCredits(params: { discordId: string; amount: number }): Promis
 }
 async function useCredits(params: { discordId: string; amount: number }): Promise<void> {
     try {
-        const currentCredits = await creditsRemaining({ discordId: params.discordId });
-        const newAmount = currentCredits - params.amount;
+        // Get current state
+        const result = await db.select({
+            amount: credits.amount,
+            freeTranscriptionsUsed: credits.freeTranscriptionsUsed,
+        }).from(credits).where(eq(credits.discord_id, params.discordId)).limit(1);
 
+        if (result.length === 0) {
+            throw new Error(`No credits record found for user: ${params.discordId}`);
+        }
+
+        const { amount: currentCredits, freeTranscriptionsUsed } = result[0];
+        const freeRemaining = Math.max(0, FREE_TRANSCRIPTIONS_TOTAL - freeTranscriptionsUsed);
+
+        // Determine if we use free transcription or paid credits
+        let newAmount = currentCredits;
+        let newFreeUsed = freeTranscriptionsUsed;
+
+        if (freeRemaining > 0) {
+            // Use free transcription
+            newFreeUsed += 1;
+        } else {
+            // Use paid credits
+            newAmount -= params.amount;
+        }
+
+        // Update database
         await db.update(credits)
-            .set({ amount: newAmount })
+            .set({ 
+                amount: newAmount,
+                freeTranscriptionsUsed: newFreeUsed,
+            })
             .where(eq(credits.discord_id, params.discordId));
 
+        // Update stats
         const totalSecondsUsed = await db.select({
             totalSecondsUsed: stats.totalSecondsUsed
         }).from(stats).where(eq(stats.discord_id, params.discordId)).limit(1);
-
 
         if (totalSecondsUsed[0]) {
             const newSeconds = totalSecondsUsed[0].totalSecondsUsed + params.amount;
@@ -90,4 +141,4 @@ async function useCredits(params: { discordId: string; amount: number }): Promis
     }
 }
 
-export { enoughCredits, creditsRemaining, addCredits, useCredits };
+export { enoughCredits, creditsRemaining, addCredits, useCredits, getFreeTranscriptionsRemaining };

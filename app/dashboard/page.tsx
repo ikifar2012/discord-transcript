@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { credits } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { getFreeTranscriptionsRemaining } from "@/lib/credits";
 import { DashboardHero } from "./_components/dashboard-hero";
 import { DashboardShell } from "./_components/dashboard-shell";
 import { PurchaseHoursCard } from "./_components/purchase-hours-card";
@@ -24,11 +25,15 @@ async function UserCreditsSection({ discordId }: { discordId: string }) {
   const creditData = userCredits[0];
   const includedMinutes = creditData?.amount / 60 || 0; // Convert seconds to minutes
   const usedMinutes = creditData?.used / 60 || 0; // Convert seconds to minutes
+  const freeTranscriptionsUsed = creditData?.freeTranscriptionsUsed || 0;
+  const freeTranscriptionsRemaining = await getFreeTranscriptionsRemaining(discordId);
 
   return (
     <UsageCard
       includedMinutes={includedMinutes}
       usedMinutes={usedMinutes}
+      freeTranscriptionsRemaining={freeTranscriptionsRemaining}
+      freeTranscriptionsUsed={freeTranscriptionsUsed}
     />
   );
 }

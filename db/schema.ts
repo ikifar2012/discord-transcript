@@ -9,6 +9,7 @@ export const credits = pgTable(
     discord_id: text("discord_id").notNull().primaryKey(),
     amount: integer("amount").notNull().default(900), // 15 minutes in seconds
     used: integer("used").notNull().default(0),
+    freeTranscriptionsUsed: integer("free_transcriptions_used").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .$onUpdate(() => /* @__PURE__ */ new Date())
