@@ -1,17 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { AnimatedNumber, AnimatedTime } from "./animated-number";
 
 export async function UsageCard({
   includedMinutes,
   usedMinutes,
   freeTranscriptionsRemaining,
-  freeTranscriptionsUsed,
 }: {
   includedMinutes: number;
   usedMinutes: number;
   freeTranscriptionsRemaining: number;
-  freeTranscriptionsUsed: number;
 }) {
   const safeIncludedMinutes = Math.max(0, Math.round(includedMinutes));
   const safeUsedMinutes = Math.max(0, Math.round(usedMinutes));
@@ -19,15 +18,6 @@ export async function UsageCard({
   const percentUsed = safeIncludedMinutes === 0
     ? 0
     : Math.min(100, Math.round((safeUsedMinutes / safeIncludedMinutes) * 100));
-
-  function formatTime(minutes: number): string {
-    if (minutes >= 60) {
-      const hours = Math.floor(minutes / 60);
-      const mins = minutes % 60;
-      return mins > 0 ? `${hours} hr ${mins} min` : `${hours} hr`;
-    }
-    return `${minutes} min`;
-  }
 
   const progressColor =
     percentUsed >= 90 ? "bg-destructive" : percentUsed >= 70 ? "bg-amber-500" : "bg-primary";
@@ -55,17 +45,16 @@ export async function UsageCard({
       <CardContent className="space-y-6">
         {/* Free transcriptions */}
         {freeTranscriptionsRemaining > 0 && (
-          <div className="rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 px-6 py-5 border border-gray-200 dark:border-gray-800 shadow-sm">
+          <div className="rounded-2xl border border-border bg-muted/40 px-6 py-5">
             <div className="space-y-3">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Free Transcriptions Available</p>
+              <p className="text-sm font-medium text-muted-foreground">Free Transcriptions Available</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-bold text-gray-900 dark:text-white">{freeTranscriptionsRemaining}</span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">of 5</span>
+                <AnimatedNumber value={freeTranscriptionsRemaining} className="text-5xl font-bold" />
+                <span className="text-sm text-muted-foreground">of 5</span>
               </div>
-              <Progress 
-                value={(freeTranscriptionsUsed / 5) * 100} 
+              <Progress
+                value={(freeTranscriptionsRemaining / 5) * 100}
                 className="h-3"
-                indicatorClassName="bg-green-500 dark:bg-green-600"
               />
             </div>
           </div>
@@ -75,7 +64,7 @@ export async function UsageCard({
         <div>
           <p className="text-sm font-medium text-muted-foreground">Paid Time Remaining</p>
           <p className="mt-2 text-4xl font-bold tabular-nums">
-            {formatTime(remainingMinutes)}
+            <AnimatedTime minutes={remainingMinutes} />
           </p>
         </div>
 
@@ -83,7 +72,7 @@ export async function UsageCard({
         <div>
           <div className="mb-2 flex items-center justify-between text-sm">
             <span className="font-medium text-muted-foreground">Usage</span>
-            <span className="font-semibold tabular-nums">{percentUsed}%</span>
+            <span className="font-semibold tabular-nums"><AnimatedNumber value={percentUsed} />%</span>
           </div>
           <Progress value={percentUsed} className="h-3 rounded-full" indicatorClassName={progressColor} />
         </div>
@@ -92,11 +81,11 @@ export async function UsageCard({
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           <div>
             <p className="text-sm text-muted-foreground">Used</p>
-            <p className="mt-1 text-lg font-semibold tabular-nums">{formatTime(safeUsedMinutes)}</p>
+            <p className="mt-1 text-lg font-semibold tabular-nums"><AnimatedTime minutes={safeUsedMinutes} /></p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Total</p>
-            <p className="mt-1 text-lg font-semibold tabular-nums">{formatTime(safeIncludedMinutes)}</p>
+            <p className="mt-1 text-lg font-semibold tabular-nums"><AnimatedTime minutes={safeIncludedMinutes} /></p>
           </div>
         </div>
       </CardContent>

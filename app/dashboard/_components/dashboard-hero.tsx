@@ -32,7 +32,7 @@ export async function DashboardHero() {
         </div>
 
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-          <Link href="/" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "h-11 w-full sm:w-auto")}>Home</Link>
+          <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "lg" }), "h-11 w-full sm:w-auto")}>Home</Link>
           <Link href={billingLink} className={cn(buttonVariants({ size: "lg" }), "h-11 w-full sm:w-auto")}>
             View Billing History
           </Link>

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { DiscordLoginButton } from "../components/discord-login-button";
 import { MarketingShell } from "../components/marketing-shell";
+import { Reveal } from "../components/reveal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
@@ -18,7 +19,7 @@ export default async function LoginPage() {
   return (
     <MarketingShell>
       <section className="flex flex-1 flex-col items-center justify-center py-12 lg:py-20">
-        <div className="w-full max-w-md space-y-8">
+        <Reveal className="w-full max-w-md space-y-8">
           {/* Header Section */}
           <div className="space-y-3 text-center">
             <div className="flex justify-center">
@@ -59,7 +60,7 @@ export default async function LoginPage() {
           <p className="text-center text-xs text-muted-foreground/70">
             By signing in, you agree to our service terms
           </p>
-        </div>
+        </Reveal>
       </section>
     </MarketingShell>
   );

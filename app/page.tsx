@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MarketingShell } from "./components/marketing-shell";
+import { Reveal } from "./components/reveal";
 import { HOUR_PACKS } from "./data/prices";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
     <MarketingShell>
       <section className="py-10 sm:py-12 lg:py-16">
         <div className="mx-auto max-w-5xl space-y-6">
+          <Reveal>
           <div className="rounded-3xl border border-border/60 bg-card/80 p-6 shadow-[0_16px_45px_rgba(0,0,0,0.2)] backdrop-blur sm:p-8">
             <Badge variant="secondary" className="rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.12em]">
               Discord Voice Transcription
@@ -30,7 +32,9 @@ export default function Home() {
               </Link>
             </div>
           </div>
+          </Reveal>
 
+          <Reveal delay={0.15}>
           <Card className="rounded-2xl border-border/70 bg-card/85 shadow-[0_18px_50px_rgba(0,0,0,0.2)]">
             <CardHeader>
               <CardTitle>Buy more hours</CardTitle>
@@ -43,12 +47,13 @@ export default function Home() {
                   href="/dashboard"
                   className="group relative block overflow-hidden rounded-xl bg-muted/45 p-4 text-left ring-1 ring-border transition duration-200 hover:-translate-y-0.5 hover:bg-muted hover:ring-foreground/30 sm:p-5"
                 >
-                  <div
-                    className={`pointer-events-none absolute inset-x-0 top-0 h-1 ${index === 1 ? "bg-gradient-to-r from-amber-400 via-orange-300 to-amber-400" : "bg-gradient-to-r from-sky-300/50 via-cyan-200/40 to-sky-300/50"}`}
-                  />
-
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-medium text-muted-foreground">{pack.hours}</p>
+                    {index === 1 ? (
+                      <Badge variant="secondary" className="rounded-full text-[10px] uppercase tracking-[0.12em]">
+                        Popular
+                      </Badge>
+                    ) : null}
                   </div>
                   <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">{pack.price}</p>
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">{pack.description}</p>
@@ -63,6 +68,7 @@ export default function Home() {
 
             </CardContent>
           </Card>
+          </Reveal>
         </div>
       </section>
     </MarketingShell>

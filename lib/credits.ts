@@ -18,6 +18,19 @@ async function getFreeTranscriptionsRemaining(discordId: string): Promise<number
     }
 }
 
+async function hasAccount(discordId: string): Promise<boolean> {
+    try {
+        const result = await db.select({
+            discord_id: credits.discord_id,
+        }).from(credits).where(eq(credits.discord_id, discordId)).limit(1);
+
+        return result.length > 0;
+    } catch (error) {
+        console.error("Failed to check account", { discordId, error });
+        throw error;
+    }
+}
+
 async function enoughCredits(params: { discordId: string; amount: number }): Promise<boolean> {
     try {
         const freeRemaining = await getFreeTranscriptionsRemaining(params.discordId);
@@ -141,4 +154,4 @@ async function useCredits(params: { discordId: string; amount: number }): Promis
     }
 }
 
-export { enoughCredits, creditsRemaining, addCredits, useCredits, getFreeTranscriptionsRemaining };
+export { hasAccount, enoughCredits, creditsRemaining, addCredits, useCredits, getFreeTranscriptionsRemaining };

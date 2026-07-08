@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { credits } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getFreeTranscriptionsRemaining } from "@/lib/credits";
+import { Reveal } from "../components/reveal";
 import { DashboardHero } from "./_components/dashboard-hero";
 import { DashboardShell } from "./_components/dashboard-shell";
 import { PurchaseHoursCard } from "./_components/purchase-hours-card";
@@ -25,16 +26,16 @@ async function UserCreditsSection({ discordId }: { discordId: string }) {
   const creditData = userCredits[0];
   const includedMinutes = creditData?.amount / 60 || 0; // Convert seconds to minutes
   const usedMinutes = creditData?.used / 60 || 0; // Convert seconds to minutes
-  const freeTranscriptionsUsed = creditData?.freeTranscriptionsUsed || 0;
   const freeTranscriptionsRemaining = await getFreeTranscriptionsRemaining(discordId);
 
   return (
-    <UsageCard
-      includedMinutes={includedMinutes}
-      usedMinutes={usedMinutes}
-      freeTranscriptionsRemaining={freeTranscriptionsRemaining}
-      freeTranscriptionsUsed={freeTranscriptionsUsed}
-    />
+    <Reveal>
+      <UsageCard
+        includedMinutes={includedMinutes}
+        usedMinutes={usedMinutes}
+        freeTranscriptionsRemaining={freeTranscriptionsRemaining}
+      />
+    </Reveal>
   );
 }
 
@@ -50,11 +51,15 @@ export default async function DashboardPage() {
   return (
     <DashboardShell>
       <div className="mx-auto max-w-5xl space-y-6">
-        <DashboardHero />
+        <Reveal>
+          <DashboardHero />
+        </Reveal>
         <Suspense fallback={<UsageCardSkeleton />}>
           <UserCreditsSection discordId={session.user.discordId} />
         </Suspense>
-        <PurchaseHoursCard hourPacks={HOUR_PACKS} checkoutAction={startCheckout} />
+        <Reveal delay={0.15}>
+          <PurchaseHoursCard hourPacks={HOUR_PACKS} checkoutAction={startCheckout} />
+        </Reveal>
       </div>
     </DashboardShell>
   );

@@ -23,11 +23,14 @@ export function PurchasePackSubmitButton({
       disabled={pending}
       className="group relative w-full cursor-pointer overflow-hidden rounded-xl bg-muted/45 p-4 text-left ring-1 ring-border transition duration-200 hover:-translate-y-0.5 hover:bg-muted hover:ring-foreground/30 sm:p-5 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-80"
     >
-      <div
-        className={`pointer-events-none absolute inset-x-0 top-0 h-1 ${isFeatured ? "bg-gradient-to-r from-amber-400 via-orange-300 to-amber-400" : "bg-gradient-to-r from-sky-300/50 via-cyan-200/40 to-sky-300/50"}`}
-      />
-
-      <p className="text-sm font-medium text-muted-foreground">{hours}</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-medium text-muted-foreground">{hours}</p>
+        {isFeatured ? (
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-secondary-foreground">
+            Popular
+          </span>
+        ) : null}
+      </div>
       <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">{price}</p>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
 
