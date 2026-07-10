@@ -16,10 +16,23 @@ export const auth = betterAuth({
     discord: {
       clientId: process.env.DISCORD_CLIENT_ID!,
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+      scope: ["identify", "email", "applications.commands"],
+      
     },
   },
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
+      // Discord's authorize URL needs integration_type=1 (user install) so the
+      // app gets linked to the user's account, but better-auth's Discord
+      // provider has no option for it — patch the returned URL instead.
+      const returned = ctx.context.returned as
+        | { url?: string; redirect?: boolean }
+        | undefined;
+      if (returned?.url?.startsWith("https://discord.com/api/oauth2/authorize")) {
+        const url = `${returned.url}&integration_type=1`;
+        ctx.setHeader("Location", url);
+        return { ...returned, url };
+      }
       // Example: Add 30 credits to a new user after signup
       const session = ctx.context.newSession?.session.userId
       if (session) {
