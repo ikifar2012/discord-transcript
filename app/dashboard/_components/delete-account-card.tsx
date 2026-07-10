@@ -3,21 +3,25 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function DeleteAccountCard() {
   const router = useRouter();
-  const [confirming, setConfirming] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleDelete() {
-    if (!confirming) {
-      setConfirming(true);
-      return;
-    }
-
     setPending(true);
     setError(null);
 
@@ -25,7 +29,6 @@ export function DeleteAccountCard() {
 
     if (deleteError) {
       setPending(false);
-      setConfirming(false);
       setError(
         deleteError.code === "SESSION_EXPIRED"
           ? "For security, deleting your account needs a recent sign-in. Log out, log back in, and try again."
@@ -49,16 +52,26 @@ export function DeleteAccountCard() {
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Button variant="destructive" onClick={handleDelete} disabled={pending}>
-            {pending ? "Deleting..." : confirming ? "Click again to confirm" : "Delete my account"}
-          </Button>
-          {confirming && !pending ? (
-            <Button variant="ghost" onClick={() => setConfirming(false)}>
-              Cancel
-            </Button>
-          ) : null}
-        </div>
+        <AlertDialog>
+          <AlertDialogTrigger render={<Button variant="destructive" disabled={pending} />}>
+            Delete my account
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action is permanent. Your profile data will be removed, while usage and balance
+                history stays tied to your Discord ID.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
+              <Button variant="destructive" onClick={handleDelete} disabled={pending}>
+                {pending ? "Deleting..." : "Yes, delete account"}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
       </CardContent>
     </Card>
