@@ -4,7 +4,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { Stripe } from "stripe";
 import { db } from "./db";
 import { createAuthMiddleware } from "better-auth/api";
-import { credits } from "./db/schema";
+import { credits, orders } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { customSession } from "better-auth/plugins";
 import getDiscordIdFromUserId from "./lib/get-discord-id";
@@ -52,6 +52,19 @@ export const auth = betterAuth({
         }
       }
     }),
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
+      // Removes PII only: the user row (name, email, avatar) plus cascading
+      // sessions and OAuth accounts. Local order rows must go first because
+      // their FK has no cascade; Stripe keeps the authoritative billing
+      // records. Credits and stats stay keyed to the Discord ID so deleting
+      // an account can't reset the balance or free transcriptions.
+      beforeDelete: async (user) => {
+        await db.delete(orders).where(eq(orders.user_id, user.id));
+      },
+    },
   },
   database: drizzleAdapter(db, {
     provider: "pg",

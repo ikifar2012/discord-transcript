@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { getFreeTranscriptionsRemaining } from "@/lib/credits";
 import { Reveal } from "../components/reveal";
 import { DashboardHero } from "./_components/dashboard-hero";
+import { DeleteAccountCard } from "./_components/delete-account-card";
 import { DashboardShell } from "./_components/dashboard-shell";
 import { PurchaseHoursCard } from "./_components/purchase-hours-card";
 import { UsageCard } from "./_components/usage-card";
@@ -59,6 +60,9 @@ export default async function DashboardPage() {
         </Suspense>
         <Reveal delay={0.15}>
           <PurchaseHoursCard hourPacks={HOUR_PACKS} checkoutAction={startCheckout} />
+        </Reveal>
+        <Reveal delay={0.2}>
+          <DeleteAccountCard />
         </Reveal>
       </div>
     </DashboardShell>

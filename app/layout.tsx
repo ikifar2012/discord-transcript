@@ -2,10 +2,42 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "./components/site-header";
 import { SiteFooter } from "./components/site-footer";
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Discord Tools by Matheson | Discord voice memo transcripts",
-  description: "Transcribe voice memos directly from Discord for as little as $3.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_TITLE} | Discord voice message transcription`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_AUTHOR }],
+  creator: SITE_AUTHOR,
+  keywords: [
+    "Discord voice message transcription",
+    "Discord voice memo to text",
+    "transcribe Discord voice messages",
+    "Discord transcription app",
+    "voice message to text",
+  ],
+  category: "productivity",
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE_NAME,
+    title: `${SITE_TITLE} | Discord voice message transcription`,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_TITLE} | Discord voice message transcription`,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
