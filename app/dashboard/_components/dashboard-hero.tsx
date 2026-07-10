@@ -27,7 +27,7 @@ export async function DashboardHero() {
             Manage your transcription balance
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
-            Buy hour packs in one tap and keep track of minutes used by your Discord account.
+            Buy hour packs in one tap and keep track of your transcription time down to the second.
           </p>
         </div>
 

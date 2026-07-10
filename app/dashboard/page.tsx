@@ -25,15 +25,15 @@ async function UserCreditsSection({ discordId }: { discordId: string }) {
     .limit(1);
 
   const creditData = userCredits[0];
-  const includedMinutes = creditData?.amount / 60 || 0; // Convert seconds to minutes
-  const usedMinutes = creditData?.used / 60 || 0; // Convert seconds to minutes
+  const includedSeconds = creditData?.amount ?? 0;
+  const usedSeconds = creditData?.used ?? 0;
   const freeTranscriptionsRemaining = await getFreeTranscriptionsRemaining(discordId);
 
   return (
     <Reveal>
       <UsageCard
-        includedMinutes={includedMinutes}
-        usedMinutes={usedMinutes}
+        includedSeconds={includedSeconds}
+        usedSeconds={usedSeconds}
         freeTranscriptionsRemaining={freeTranscriptionsRemaining}
       />
     </Reveal>

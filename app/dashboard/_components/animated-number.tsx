@@ -3,13 +3,17 @@
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-function formatTime(minutes: number): string {
-  if (minutes >= 60) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return mins > 0 ? `${hours} hr ${mins} min` : `${hours} hr`;
+function formatTime(totalSeconds: number): string {
+  const seconds = Math.max(0, Math.round(totalSeconds));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  if (secs === 0) {
+    return `${hours} hr ${minutes} min`;
   }
-  return `${minutes} min`;
+
+  return `${hours} hr ${minutes} min ${secs} sec`;
 }
 
 function Reveal({ text, className }: { text: string; className?: string }) {
@@ -35,6 +39,6 @@ export function AnimatedNumber({ value, className }: { value: number; className?
   return <Reveal text={Math.round(value).toString()} className={className} />;
 }
 
-export function AnimatedTime({ minutes, className }: { minutes: number; className?: string }) {
-  return <Reveal text={formatTime(Math.max(0, Math.round(minutes)))} className={className} />;
+export function AnimatedTime({ seconds, className }: { seconds: number; className?: string }) {
+  return <Reveal text={formatTime(seconds)} className={className} />;
 }

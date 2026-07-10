@@ -4,20 +4,20 @@ import { Badge } from "@/components/ui/badge";
 import { AnimatedNumber, AnimatedTime } from "./animated-number";
 
 export async function UsageCard({
-  includedMinutes,
-  usedMinutes,
+  includedSeconds,
+  usedSeconds,
   freeTranscriptionsRemaining,
 }: {
-  includedMinutes: number;
-  usedMinutes: number;
+  includedSeconds: number;
+  usedSeconds: number;
   freeTranscriptionsRemaining: number;
 }) {
-  const safeIncludedMinutes = Math.max(0, Math.round(includedMinutes));
-  const safeUsedMinutes = Math.max(0, Math.round(usedMinutes));
-  const remainingMinutes = Math.max(0, safeIncludedMinutes - safeUsedMinutes);
-  const percentUsed = safeIncludedMinutes === 0
+  const safeIncludedSeconds = Math.max(0, Math.round(includedSeconds));
+  const safeUsedSeconds = Math.max(0, Math.round(usedSeconds));
+  const remainingSeconds = Math.max(0, safeIncludedSeconds - safeUsedSeconds);
+  const percentUsed = safeIncludedSeconds === 0
     ? 0
-    : Math.min(100, Math.round((safeUsedMinutes / safeIncludedMinutes) * 100));
+    : Math.min(100, Math.round((safeUsedSeconds / safeIncludedSeconds) * 100));
 
   const progressColor =
     percentUsed >= 90 ? "bg-destructive" : percentUsed >= 70 ? "bg-amber-500" : "bg-primary";
@@ -64,7 +64,7 @@ export async function UsageCard({
         <div>
           <p className="text-sm font-medium text-muted-foreground">Paid Time Remaining</p>
           <p className="mt-2 text-4xl font-bold tabular-nums">
-            <AnimatedTime minutes={remainingMinutes} />
+            <AnimatedTime seconds={remainingSeconds} />
           </p>
         </div>
 
@@ -81,11 +81,11 @@ export async function UsageCard({
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           <div>
             <p className="text-sm text-muted-foreground">Used</p>
-            <p className="mt-1 text-lg font-semibold tabular-nums"><AnimatedTime minutes={safeUsedMinutes} /></p>
+            <p className="mt-1 text-lg font-semibold tabular-nums"><AnimatedTime seconds={safeUsedSeconds} /></p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Total</p>
-            <p className="mt-1 text-lg font-semibold tabular-nums"><AnimatedTime minutes={safeIncludedMinutes} /></p>
+            <p className="mt-1 text-lg font-semibold tabular-nums"><AnimatedTime seconds={safeIncludedSeconds} /></p>
           </div>
         </div>
       </CardContent>
