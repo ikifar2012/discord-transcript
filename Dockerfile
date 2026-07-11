@@ -15,6 +15,13 @@ FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
+# Dummy secrets so module-scope SDK clients (Stripe, Groq) can be constructed
+# while `next build` collects page data. Never used to make real API calls;
+# the runtime container must provide the real values.
+ENV STRIPE_SECRET_KEY=sk_test_dummy_build_placeholder
+ENV STRIPE_WEBHOOK_SECRET=whsec_dummy_build_placeholder
+ENV GROQ_API_TOKEN=gsk_dummy_build_placeholder
+ENV BETTER_AUTH_SECRET=dummy_build_placeholder
 RUN bun --bun next build
 
 # Production image: only the standalone output, run as non-root
