@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:1.3.14 AS base
+FROM oven/bun:1 AS base
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 RUN bun --bun next build
 
 # Production image: only the standalone output, run as non-root
-FROM oven/bun:1.3.14-slim AS runner
+FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
