@@ -22,6 +22,9 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ARG DATABASE_URL
+ENV DATABASE_URL="$DATABASE_URL"
+
 
 # server.js does not serve public/ or .next/static unless copied in
 COPY --from=builder --chown=bun:bun /app/.next/standalone ./
