@@ -24,7 +24,7 @@ ENV GROQ_API_TOKEN=gsk_dummy_build_placeholder
 ENV BETTER_AUTH_SECRET=dummy_build_placeholder
 RUN bun --bun next build
 
-# Production image: only the standalone output, run as non-root
+# Production image: includes runtime files for migrations + next start
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -32,11 +32,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG DATABASE_URL
 ENV DATABASE_URL="$DATABASE_URL"
 
-
-# server.js does not serve public/ or .next/static unless copied in
-COPY --from=builder --chown=bun:bun /app/.next/standalone ./
-COPY --from=builder --chown=bun:bun /app/public ./public
-COPY --from=builder --chown=bun:bun /app/.next/static ./.next/static
+# Copy the entire built app so runtime always has all required files.
+COPY --from=builder --chown=bun:bun /app /app
+RUN chmod +x ./run.sh
 
 USER bun
 
@@ -44,4 +42,4 @@ ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 EXPOSE 3000
 
-CMD ["bun", "server.js"]
+CMD ["./run.sh"]
