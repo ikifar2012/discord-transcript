@@ -1,15 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function SiteFooter() {
   return (
     <footer className="flex flex-col gap-3 border-t border-border py-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
-        <span
+        <Image
+          src="/logo.png"
+          alt=""
+          width={28}
+          height={28}
+          unoptimized
           aria-hidden
-          className="grid size-7 place-items-center rounded-lg bg-primary text-[10px] font-semibold text-primary-foreground"
-        >
-          TD
-        </span>
+          className="size-7 rounded-lg"
+        />
         <div>
           <p className="text-foreground/85">Transcribe for Discord by Matheson</p>
           <p className="text-xs">

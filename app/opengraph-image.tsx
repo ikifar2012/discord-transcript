@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { SITE_AUTHOR, SITE_NAME } from "@/lib/site";
 
@@ -10,7 +12,10 @@ export const contentType = "image/png";
 
 export const alt = `${SITE_NAME} by ${SITE_AUTHOR}: turn Discord voice messages into searchable text`;
 
-export default function Image() {
+export default async function Image() {
+  const logo = await readFile(join(process.cwd(), "app/apple-icon.png"));
+  const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -37,22 +42,14 @@ export default function Image() {
             color: "rgba(248,250,252,0.85)",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 56,
-              height: 56,
-              borderRadius: 14,
-              background: "#38bdf8",
-              color: "#0a0f17",
-              fontSize: 24,
-              fontWeight: 700,
-            }}
-          >
-            TD
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoSrc}
+            alt=""
+            width={56}
+            height={56}
+            style={{ borderRadius: 14 }}
+          />
           {SITE_NAME.toUpperCase()}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
