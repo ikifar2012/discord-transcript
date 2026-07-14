@@ -17,7 +17,9 @@ export async function createCheckoutSession(params: { userId: string; discordId:
     const session = await stripe.checkout.sessions.create({
         mode: "payment",
         customer: await getStripeCustomerId(params.userId),
-
+        invoice_creation: {
+            enabled: true,
+        },
         line_items: [
             {
                 price_data: {
@@ -38,7 +40,7 @@ export async function createCheckoutSession(params: { userId: string; discordId:
         },
         success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
-        
+
     });
 
     return session;
@@ -56,23 +58,23 @@ export async function generateOrderId(userId: string, packId: HourPackId, orderS
     });
 
     return orderId;
-    
+
 }
 export async function updateOrderStatus(orderId: string, newStatus: orderStatus): Promise<boolean> {
-try {
-    await db.update(orders)
-        .set({ order_status: newStatus })
-        .where(eq(orders.order_id, orderId));
+    try {
+        await db.update(orders)
+            .set({ order_status: newStatus })
+            .where(eq(orders.order_id, orderId));
         return true
-}
-catch (error) {
-    console.error("Failed to update order status", {
-        orderId,
-        newStatus,
-        error,
-    });
-    throw error;
-}
+    }
+    catch (error) {
+        console.error("Failed to update order status", {
+            orderId,
+            newStatus,
+            error,
+        });
+        throw error;
+    }
 }
 
 export async function getOrderStatus(orderId: string): Promise<orderStatus | null> {
