@@ -10,7 +10,7 @@ export const size = {
 
 export const contentType = "image/png";
 
-export const alt = `${SITE_NAME} by ${SITE_AUTHOR}: turn Discord voice messages into searchable text`;
+export const alt = `${SITE_NAME} by ${SITE_AUTHOR}: turn Discord voice messages into text`;
 
 export default async function Image() {
   const logo = await readFile(join(process.cwd(), "app/apple-icon.png"));
@@ -54,7 +54,7 @@ export default async function Image() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ fontSize: 72, fontWeight: 600, lineHeight: 1.05, maxWidth: 950 }}>
-            Turn Discord voice messages into searchable text.
+            Turn Discord voice messages into text.
           </div>
           <div style={{ fontSize: 32, color: "rgba(248,250,252,0.7)" }}>
             {`5 free transcriptions · prepaid hours from $2 · by ${SITE_AUTHOR}`}

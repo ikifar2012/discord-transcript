@@ -20,7 +20,7 @@ export const FAQS = [
   {
     question: "What is Transcribe for Discord?",
     answer:
-      "Transcribe for Discord is a Discord app that turns voice messages into searchable text directly inside Discord, proudly built in Toronto by Matheson. You sign in with your Discord account, the app links to it, and transcripts appear right where the voice memo was sent.",
+      "Transcribe for Discord is a Discord app that turns voice messages into text directly inside Discord, proudly built in Toronto by Matheson. You sign in with your Discord account, the app links to it, and transcripts appear right where the voice memo was sent.",
   },
   {
     question: "How much does Discord voice transcription cost?",

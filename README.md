@@ -1,6 +1,6 @@
 # Transcribe for Discord
 
-Turn Discord voice messages into searchable text. Users sign in with Discord, get their first 5 transcriptions free, then prepay for hours of audio (no subscription). A companion Discord bot calls this app's API to transcribe voice memos and post the text back in chat.
+Turn Discord voice messages into text. Users sign in with Discord, get their first 5 transcriptions free, then prepay for hours of audio (no subscription). A companion Discord bot calls this app's API to transcribe voice memos and post the text back in chat.
 
 This repository contains the web app: the marketing site, the user dashboard, the billing flow, and the bot-facing transcription API.
 

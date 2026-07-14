@@ -32,7 +32,7 @@ export default function Home() {
             </Badge>
 
             <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
-              Turn Discord voice messages into searchable text.
+              Turn Discord voice messages into text.
             </h1>
 
             <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
