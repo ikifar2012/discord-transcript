@@ -46,7 +46,7 @@ export const auth = betterAuth({
         if (existingCredits.length === 0) {
           await db.insert(credits).values({
             discord_id: discordId,
-            amount: 900, // 15 minutes in seconds
+            amount: 0, // 0 credits on signup
             used: 0,
           });
         }
