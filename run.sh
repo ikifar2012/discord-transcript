@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 set -eu
+source .env
 
 required_env_vars="
 DATABASE_URL
