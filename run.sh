@@ -29,7 +29,7 @@ if [ -n "$missing_vars" ]; then
 fi
 
 echo "Applying database migrations..."
-bun run db:migrate
+bunx --bun drizzle-kit migrate
 
 echo "Starting web server..."
 exec bun --bun next start
