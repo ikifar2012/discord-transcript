@@ -18,6 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export function DeleteAccountCard() {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +30,7 @@ export function DeleteAccountCard() {
 
     if (deleteError) {
       setPending(false);
+      setOpen(true);
       setError(
         deleteError.code === "SESSION_EXPIRED"
           ? "For security, deleting your account needs a recent sign-in. Log out, log back in, and try again."
@@ -37,6 +39,7 @@ export function DeleteAccountCard() {
       return;
     }
 
+    setOpen(false);
     router.push("/");
     router.refresh();
   }
@@ -52,7 +55,15 @@ export function DeleteAccountCard() {
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
-        <AlertDialog>
+        <AlertDialog
+          open={open}
+          onOpenChange={(nextOpen) => {
+            setOpen(nextOpen);
+            if (!nextOpen) {
+              setError(null);
+            }
+          }}
+        >
           <AlertDialogTrigger render={<Button variant="destructive" disabled={pending} />}>
             Delete my account
           </AlertDialogTrigger>
@@ -64,6 +75,11 @@ export function DeleteAccountCard() {
                 history stays tied to your Discord ID.
               </AlertDialogDescription>
             </AlertDialogHeader>
+            {error ? (
+              <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            ) : null}
             <AlertDialogFooter>
               <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
               <Button variant="destructive" onClick={handleDelete} disabled={pending}>
@@ -72,7 +88,6 @@ export function DeleteAccountCard() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
       </CardContent>
     </Card>
   );

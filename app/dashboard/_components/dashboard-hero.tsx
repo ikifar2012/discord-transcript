@@ -12,7 +12,7 @@ export async function DashboardHero() {
     headers: await headers(),
   });
   const billingLink = await getBillingHistoryLink(
-    session?.user?.id as string,
+    session?.user?.id,
     `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
   );
 

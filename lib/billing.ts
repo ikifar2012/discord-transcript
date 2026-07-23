@@ -2,18 +2,33 @@ import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { user } from "@/db/schema";
 import getStripeServer from "./stripe-server";
-async function getBillingHistoryLink(id: string, returnUrl: string): Promise<string> {
+async function getBillingHistoryLink(id: string | undefined, returnUrl: string): Promise<string> {
+    if (!id) {
+        return returnUrl;
+    }
 
-    const stripe = await getStripeServer();
     const stripeCustomerId = await getStripeCustomerId(id);
-    const billingHistory = await stripe.billingPortal.sessions.create({
-        customer: stripeCustomerId,
-        return_url: returnUrl,
-        
-    });
-    const billingHistorylink = billingHistory.url;
+    if (!stripeCustomerId) {
+        return returnUrl;
+    }
 
-  return billingHistorylink;
+    try {
+        const stripe = await getStripeServer();
+        const billingHistory = await stripe.billingPortal.sessions.create({
+            customer: stripeCustomerId,
+            return_url: returnUrl,
+        });
+
+        return billingHistory.url;
+    } catch (error) {
+        // If a customer was deleted or is otherwise invalid in Stripe, keep dashboard usable.
+        console.warn("Failed to create billing portal session", {
+            userId: id,
+            stripeCustomerId,
+            error,
+        });
+        return returnUrl;
+    }
 }
 async function getStripeCustomerId(id: string): Promise<string | undefined> {
     const result = await db.select({
