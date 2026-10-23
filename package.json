@@ -13,7 +13,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@base-ui/react": "^1.6.0",
+    "@base-ui/react": "^1.9.0",
     "@better-auth/stripe": "^1.7.12",
     "@stripe/react-stripe-js": "^6.7.0",
     "@stripe/stripe-js": "^9.9.0",
